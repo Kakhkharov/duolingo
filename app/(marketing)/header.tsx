@@ -1,0 +1,63 @@
+import Image from "next/image";
+
+import { LoaderIcon } from "lucide-react";
+import {
+  ClerkLoaded,
+  ClerkLoading,
+  Show,
+  SignInButton,
+  UserButton,
+} from "@clerk/nextjs";
+
+import { Button } from "@/components/ui/button";
+
+/**
+ * Global header for marketing pages containing branding and authentication controls.
+ * Server Component
+ *
+ * @returns A responsive header with the Lingo logo, and Clerk authentication buttons (login, sign-in/user profile) depending on the user's session state.
+ *
+ * @example
+ * ```tsx
+ * <Header />
+ * ```
+ */
+export const Header = () => {
+  return (
+    <header className="px-4 w-full h-20 border-b-2 border-slate-200">
+      <div className="flex justify-between items-center mx-auto h-full lg:max-w-5xl">
+        <div className="flex gap-x-3 items-center pl-4">
+          <Image
+            alt="Logo"
+            className="rounded-xl shrink-0"
+            height={52}
+            src="/logo.png"
+            width={52}
+          />
+          <h1 className="text-xl lg:text-2xl font-extrabold tracking-wide text-green-600">
+            HOSPITAL SCHOOL
+          </h1>
+        </div>
+        <ClerkLoading>
+          <LoaderIcon className="animate-spin size-5 text-muted-foreground" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <Show when="signed-out">
+            <SignInButton
+              forceRedirectUrl="/learn"
+              mode="modal"
+              signUpForceRedirectUrl="/learn"
+            >
+              <Button size="lg" variant="ghost">
+                Login
+              </Button>
+            </SignInButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
+        </ClerkLoaded>
+      </div>
+    </header>
+  );
+};

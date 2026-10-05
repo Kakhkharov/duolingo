@@ -1,0 +1,77 @@
+import Image from "next/image";
+import Link from "next/link";
+
+import { InfinityIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import type { courses } from "@/db/schema";
+
+interface UserProgressProps {
+  activeCourse: typeof courses.$inferSelect;
+  hasActiveSubscription: boolean;
+  hearts: number;
+  points: number;
+}
+
+/**
+ * Displays top-level user progress metrics including the active course, points, and hearts.
+ * Client Component (used implicitly on Server but uses next/link)
+ *
+ * @param props - {@link UserProgressProps}
+ * @returns A horizontal layout with navigation buttons for the current course, user points, and remaining hearts (or infinity symbol if subscribed).
+ *
+ * @example
+ * ```tsx
+ * <UserProgress activeCourse={course} hasActiveSubscription={true} hearts={5} points={100} />
+ * ```
+ */
+export const UserProgress = ({
+  activeCourse,
+  hasActiveSubscription,
+  hearts,
+  points,
+}: UserProgressProps) => {
+  return (
+    <div className="flex gap-x-2 justify-between items-center w-full">
+      <Link href="/courses">
+        <Button variant="ghost">
+          <Image
+            alt={activeCourse.title}
+            className="rounded-md border"
+            height={32}
+            src={activeCourse.imageSrc}
+            width={32}
+          />
+        </Button>
+      </Link>
+      <Link href="/shop">
+        <Button className="text-orange-500" variant="ghost">
+          <Image
+            alt="Points"
+            className="mr-2"
+            height={28}
+            src="/points.svg"
+            width={28}
+          />
+          {points}
+        </Button>
+      </Link>
+      <Link href="/shop">
+        <Button className="text-rose-500" variant="ghost">
+          <Image
+            alt="Hearts"
+            className="mr-2"
+            height={22}
+            src="/heart.svg"
+            width={22}
+          />
+          {hasActiveSubscription ? (
+            <InfinityIcon className="size-4 stroke-3" />
+          ) : (
+            hearts
+          )}
+        </Button>
+      </Link>
+    </div>
+  );
+};

@@ -1,0 +1,68 @@
+import Image from "next/image";
+import Link from "next/link";
+
+import { LoaderIcon } from "lucide-react";
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
+
+import { SidebarItem } from "@/components/sidebar-item";
+import { cn } from "@/lib/utils";
+
+interface SidebarProps {
+  className?: string;
+}
+
+/**
+ * Main application desktop sidebar providing top-level navigation and user profile access.
+ * Server Component
+ *
+ * @param props - {@link SidebarProps}
+ * @returns A vertical container with branding, navigation items for major sections (Learn, Leaderboard, Quests, Shop), and the Clerk user profile button.
+ *
+ * @example
+ * ```tsx
+ * <Sidebar className="hidden lg:flex" />
+ * ```
+ */
+export const Sidebar = ({ className }: SidebarProps) => {
+  return (
+    <div
+      className={cn(
+        "flex top-0 left-0 flex-col px-4 h-full border-r-2 lg:w-64 lg:fixed",
+        className,
+      )}
+    >
+      <Link href="/learn">
+        <div className="flex gap-x-3 items-center pt-8 pb-7 pl-4">
+          <Image
+            alt="Logo"
+            className="rounded-xl shrink-0"
+            height={56}
+            src="/logo.png"
+            width={56}
+          />
+          <h1 className="text-xl font-extrabold tracking-wide text-green-600 leading-tight">
+            HOSPITAL SCHOOL
+          </h1>
+        </div>
+      </Link>
+      <div className="flex flex-col flex-1 gap-y-2">
+        <SidebarItem href="/learn" iconSrc="/learn.svg" label="Learn" />
+        <SidebarItem
+          href="/leaderboard"
+          iconSrc="/leaderboard.svg"
+          label="Leaderboard"
+        />
+        <SidebarItem href="/quests" iconSrc="/quests.svg" label="Quests" />
+        <SidebarItem href="/shop" iconSrc="/shop.svg" label="Shop" />
+      </div>
+      <div className="p-4">
+        <ClerkLoading>
+          <LoaderIcon className="animate-spin size-5 text-muted-foreground" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <UserButton />
+        </ClerkLoaded>
+      </div>
+    </div>
+  );
+};
